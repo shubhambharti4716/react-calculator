@@ -10,20 +10,33 @@ function App() {
   const [message, setMessage] = useState("");
   const [result, setResult] = useState(null);
 
-  function calculate(type) {
+  function validateInputs() {
+    if (!num1.trim() || !num2.trim()) {
+      setStatus("Error!");
+      setMessage("Please enter both numbers.");
+      setResult(null);
+      return false;
+    }
 
+    const regex = /^-?\d*\.?\d+$/;
+    if (!regex.test(num1) || !regex.test(num2)) {
+      setStatus("Error!");
+      setMessage("Please enter valid numbers.");
+      setResult(null);
+      return false;
+    }
+
+    return true;
+  }
+
+  function calculate(type) {
+    if (validateInputs()) {
     const number1 = parseFloat(num1);
     const number2 = parseFloat(num2);
 
-    if (isNaN(number1)) {
+    if (type === "/" && number2 === 0) {
       setStatus("Error!");
-      setMessage("Num 1 Cannot Be Empty");
-      setResult(null);
-      return;
-    }
-    if (isNaN(number2)) {
-      setStatus("Error!");
-      setMessage("Num 2 Cannot Be Empty");
+      setMessage("Cannot divide by zero.");
       setResult(null);
       return;
     }
@@ -50,6 +63,7 @@ function App() {
     // resetting input values to empty
     setNum1("");
     setNum2("");
+  }
   }
 
   return (
